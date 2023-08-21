@@ -1,6 +1,6 @@
 # TS 类型体操
 
-## easy
+## Easy
 
 ### 1. 实现 Pick
 
@@ -361,7 +361,9 @@ type FunctionParamsType = MyParameters<typeof foo> // [arg1: string, arg2: numbe
 type MyParameters<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never
 ```
 
-### 14. 获取函数返回类型
+## Medium
+
+### 1. 获取函数返回类型
 
 不使用 `ReturnType` 实现 TypeScript 的 `ReturnType<T>` 泛型。
 
@@ -380,7 +382,7 @@ type a = MyReturnType<typeof fn> // 应推导出 "1 | 2"
 type MyReturnType<T extends (...args: any[]) => any> = T extends (...args: any[]) => infer R ? R : never
 ```
 
-### 15. 实现 Omit
+### 2. 实现 Omit
 
 不使用 `Omit` 实现 TypeScript 的 `Omit<T, K>` 泛型。
 
@@ -418,7 +420,7 @@ type MyOmit<T, K extends keyof T> = {
 
 - 在 TypeScript 4.1 及更高版本中，您可以使用映射类型中的 as 子句重新映射映射类型中的键。[通过 as 进行键重新映射](https://www.typescriptlang.org/docs/handbook/2/mapped-types.html#key-remapping-via-as)
 
-### 16. 对象部分属性只读
+### 3. 对象部分属性只读
 
 实现一个泛型`MyReadonly2<T, K>`，它带有两种类型的参数`T`和`K`。
 
@@ -457,7 +459,7 @@ type MyReadonly2<T, K extends keyof T = keyof T> = {
 - 因为第二个泛型可能为空，所以需要通过=来赋默认值
 - 因为第二个交叉类型使用了 T extends K ? never : T 判断，所以默认值应该是 keyof T
 
-### 17. 对象属性只读（递归）
+### 4. 对象属性只读（递归）
 
 实现一个泛型 `DeepReadonly<T>`，它将对象的每个参数及其子对象递归地设为只读。
 
@@ -493,7 +495,7 @@ type DeepReadonly<T> = {
 
 > 知识点： 可以通过 `keyof T[key] extends never` 来判断该属性是不是一个普通类型
 
-### 18. 元组转合集
+### 5. 元组转合集
 
 实现泛型`TupleToUnion<T>`，它返回元组所有值的合集。
 
@@ -509,7 +511,7 @@ type Test = TupleToUnion<Arr> // expected to be '1' | '2' | '3'
 type TupleToUnion<T extends readonly unknown[]> = T[number]
 ```
 
-### 19.可串联构造器
+### 6.可串联构造器
 
 在 JavaScript 中我们经常会使用可串联（Chainable/Pipeline）的函数构造一个对象，但在 TypeScript 中，你能合理的给它赋上类型吗？
 
@@ -567,7 +569,7 @@ type Chainable<T = {}> = {
 }
 ```
 
-### 20. 最后一个元素
+### 7. 最后一个元素
 
 实现一个`Last<T>`泛型，它接受一个数组`T`并返回其最后一个元素的类型。
 
@@ -585,7 +587,7 @@ type tail2 = Last<arr2> // 应推导出 1
 type Last<T extends unknown[]> = T extends [...unknown[], infer Last] ? Last : never
 ```
 
-### 21. 排除最后一项
+### 8. 排除最后一项
 
 实现一个泛型`Pop<T>`，它接受一个数组`T`，并返回一个由数组`T`的前 N-1 项（N 为数组`T`的长度）以相同的顺序组成的数组。
 
@@ -605,7 +607,7 @@ type re2 = Pop<arr2> // expected to be [3, 2]
 type Pop<T extends unknown[]> = T extends [...infer R, unknown] ? R : T
 ```
 
-### 22. Promise.all
+### 9. Promise.all
 
 给函数`PromiseAll`指定类型，它接受元素为 Promise 或者类似 Promise 的对象的数组，返回值应为`Promise<T>`，其中`T`是这些 Promise 的结果组成的数组。
 
@@ -639,7 +641,7 @@ declare function PromiseAll<T extends unknown[]>(
 }>
 ```
 
-### 23. 查找类型
+### 10. 查找类型
 
 有时，您可能希望根据某个属性在联合类型中查找类型。
 
@@ -664,7 +666,7 @@ type MyDog = LookUp<Cat | Dog, 'dog'> // expected to be `Dog`
 type LookUp<U extends { type: string }, T extends string> = U extends { type: T } ? U : never
 ```
 
-### 24. 去除左侧空白
+### 11. 去除左侧空白
 
 实现 `TrimLeft<T>` ，它接收确定的字符串类型并返回一个新的字符串，其中新返回的字符串删除了原字符串开头的空白字符串。
 
@@ -680,7 +682,7 @@ type Space = ' ' | '\n' | '\t'
 type TrimLeft<S extends string> = S extends `${Space}${infer R}` ? TrimLeft<R> : S
 ```
 
-### 25. 去除两端空白字符
+### 12. 去除两端空白字符
 
 实现`Trim<T>`，它接受一个明确的字符串类型，并返回一个新字符串，其中两端的空白符都已被删除。
 例如

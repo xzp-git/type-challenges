@@ -36,15 +36,14 @@
 
 /* _____________ 你的代码 _____________ */
 
-type DeepReadonly<T> = any
+type DeepReadonly<T> = {
+  readonly [key in keyof T]: keyof T[key] extends never ? T[key] : DeepReadonly<T[key]>
+}
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
-type cases = [
-  Expect<Equal<DeepReadonly<X1>, Expected1>>,
-  Expect<Equal<DeepReadonly<X2>, Expected2>>,
-]
+type cases = [Expect<Equal<DeepReadonly<X1>, Expected1>>, Expect<Equal<DeepReadonly<X2>, Expected2>>]
 
 type X1 = {
   a: () => 22

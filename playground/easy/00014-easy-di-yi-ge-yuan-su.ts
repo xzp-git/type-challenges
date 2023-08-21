@@ -31,7 +31,7 @@
 type First<T extends unknown[]> = T[number] extends never ? never : T[0]
 
 const a: unknown[] = []
-type A = typeof a
+type A1 = typeof a
 type B = unknown extends never ? 1 : 2
 
 /* _____________ 测试用例 _____________ */

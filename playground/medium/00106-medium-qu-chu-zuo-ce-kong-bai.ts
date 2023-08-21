@@ -18,7 +18,9 @@
 
 /* _____________ 你的代码 _____________ */
 
-type TrimLeft<S extends string> = any
+type Space = ' ' | '\n' | '\t'
+
+type TrimLeft<S extends string> = S extends `${Space}${infer R}` ? TrimLeft<R> : S
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

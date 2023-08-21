@@ -18,8 +18,11 @@
 
 /* _____________ 你的代码 _____________ */
 
-type Includes<T extends readonly any[], U> = any
-
+type Includes<T extends readonly unknown[], U> = T extends [infer First, ...infer Rest]
+  ? Equal<First, U> extends true
+    ? true
+    : Includes<Rest, U>
+  : false
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 

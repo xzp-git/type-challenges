@@ -30,7 +30,17 @@
 
 /* _____________ 你的代码 _____________ */
 
-type MyOmit<T, K> = any
+// type UnPick<T, K> = T extends K ? never : T
+
+// type MyOmit<T, K extends keyof T> = {
+//   [P in UnPick<keyof T, K>]: T[P]
+// }
+
+type MyOmit<T, K extends keyof T> = {
+  [P in keyof T as P extends K ? never : P]: T[P]
+}
+
+type A = MyOmit<Todo, 'description'>
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

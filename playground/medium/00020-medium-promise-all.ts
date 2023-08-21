@@ -23,7 +23,22 @@
 
 /* _____________ 你的代码 _____________ */
 
-declare function PromiseAll(values: any): any
+// declare function PromiseAll<T extends unknown[]>(
+//   values: readonly [...T],
+// ): Promise<{
+//   [I in keyof T]: Awaited<T[I]>
+// }>
+
+type MyAwaited<T> = T extends PromiseLike<infer R> ? MyAwaited<R> : T
+
+type A = MyAwaited<Promise<number>> // number
+type B = MyAwaited<Promise<Promise<string>>> // string
+
+declare function PromiseAll<T extends unknown[]>(
+  values: readonly [...T],
+): Promise<{
+  [I in keyof T]: MyAwaited<T[I]>
+}>
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

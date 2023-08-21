@@ -39,21 +39,37 @@
 
 /* _____________ 你的代码 _____________ */
 
-type Chainable = {
-  option(key: string, value: any): any
-  get(): any
-}
+// type Chainable = {
+//   option(key: string, value: any): any
+//   get(): any
+// }
 
+// 1.可以使用 T = {} 来作为默认值，甚至默认参数与默认返回值，再通过递归传递 T 即可实现递归全局记录
+// option 是一个函数接收两个值：K 和 V，为了约束 key 不可重复必须范型传入，value 是任意类型范型不做约束直接透传
+// type Chainable<T = {}> = {
+//   option<K extends string, V>(key: K, value: V): Chainable<T & Record<K, V>>
+//   get(): () => T
+// }
+
+// 2 验证重复密钥，实现相同的密钥报错
+
+// type Chainable<T = {}> = {
+//   option<K extends string, V>(key: K extends keyof T ? never : K, value: V): Chainable<T & Record<K, V>>
+//   get(): () => T
+// }
+
+// 3.最后直接&联合并不能将相同key的类型覆盖，因此需Omit去掉前一个类型中相同的key
+
+type Chainable<T = {}> = {
+  option: <K extends string, V>(key: K extends keyof T ? never : K, value: V) => Chainable<Omit<T, K> & Record<K, V>>
+  get(): T
+}
 /* _____________ 测试用例 _____________ */
 import type { Alike, Expect } from '@type-challenges/utils'
 
 declare const a: Chainable
 
-const result1 = a
-  .option('foo', 123)
-  .option('bar', { value: 'Hello World' })
-  .option('name', 'type-challenges')
-  .get()
+const result1 = a.option('foo', 123).option('bar', { value: 'Hello World' }).option('name', 'type-challenges').get()
 
 const result2 = a
   .option('name', 'another name')
